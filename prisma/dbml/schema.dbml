@@ -1,0 +1,72 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  email String [unique, not null]
+  name String
+  password String [not null]
+  phone String [not null]
+  address String [not null]
+  role Role [not null, default: 'USER']
+  products Product [not null]
+  carts Cart [not null]
+  checkouts Checkout [not null]
+}
+
+Table Product {
+  id String [pk]
+  author User [not null]
+  authorId String [not null]
+  title String [not null]
+  desc String [not null]
+  stock Int [not null, default: 0]
+  price Int [not null, default: 0]
+  discount Int [not null, default: 0]
+  view Int [default: 0]
+  sold Int [default: 0]
+  image String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  Cart Cart [not null]
+}
+
+Table Cart {
+  id String [pk]
+  user User
+  userId String
+  note String [not null]
+  quantity Int [not null, default: 0]
+  total Int [not null, default: 0]
+  products Product
+  Checkout Checkout
+  isHidden Boolean [not null, default: false]
+  checkoutId String
+  productId String [not null]
+}
+
+Table Checkout {
+  id String [pk]
+  total Int [not null, default: 0]
+  user User
+  userId String
+  address String [not null]
+  proofOfPayment String [not null]
+  cart Cart [not null]
+}
+
+Enum Role {
+  USER
+  ADMIN
+}
+
+Ref: Product.authorId > User.id
+
+Ref: Cart.userId > User.id
+
+Ref: Cart.productId > Product.id
+
+Ref: Cart.checkoutId > Checkout.id
+
+Ref: Checkout.userId > User.id
